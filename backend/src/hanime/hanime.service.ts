@@ -11,7 +11,9 @@ export class HanimeService {
 
   async search(query: string): Promise<SearchResult[]> {
     try {
-      return await this.apiClient.get<SearchResult[]>(`/api/hanime/search/${encodeURIComponent(query)}`);
+      const res = await this.apiClient.get<any>(`/api/hanime/search/${encodeURIComponent(query)}`);
+      const list = Array.isArray(res) ? res : (res?.results || res);
+      return Array.isArray(list) && list.length > 0 ? list : MOCK.hanimeSearch;
     } catch {
       return MOCK.hanimeSearch;
     }
